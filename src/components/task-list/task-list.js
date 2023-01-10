@@ -1,34 +1,38 @@
-import React from "react";
+import React, { Component } from "react";
 
 import Task from "../task";
 
 import "./task-list.css"
 
-const TaskList = ({ todos }) => {
+export default class TaskList extends Component {
+    render() {
+        const { todoData, onToggleDone, editItem, deleteItem, onSubmit } = this.props
 
-    const items = todos.map(({id, ...itemProps}) => {
+        const items = todoData.map(({id, ...itemProps}) => {
+            let classNames = ""
+            if (itemProps.done) classNames += "completed"
+            if (itemProps.editable) classNames += "editing"
+
+            const editing = <input type="text"
+                                   className="edit"
+                                   value={itemProps.description}
+                                   onKeyDown={(evt) => onSubmit(evt)} />
+
+            return (
+                <li key={id} className={classNames}>
+                    <Task
+                        {...itemProps}
+                        onToggleDone={() => onToggleDone(id)}
+                        editItem={() => editItem(id)}
+                        deleteItem={() => deleteItem(id)} />
+                    {(itemProps.editable) ? editing : null}
+                </li>
+            )
+        })
         return (
-            <li key={id}>
-                <Task {...itemProps} />
-            </li>
+            <ul className="todo-list">
+                {items}
+            </ul>
         )
-    })
-    return (
-        <ul className="todo-list">
-            {items}
-        </ul>
-    )
+    }
 }
-
-export default TaskList
-
-// <li className="completed">
-//     <Task label={todos[0].label} creationTime={todos[0].startTime} />
-// </li>
-// <li className="editing">
-//     <Task label={todos[1].label} creationTime={todos[1].startTime} />
-//     <input type="text" className="edit" value="Editing task"/>
-// </li>
-// <li>
-//     <Task label={todos[2].label} creationTime={todos[2].startTime} />
-// </li>
