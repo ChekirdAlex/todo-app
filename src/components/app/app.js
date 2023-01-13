@@ -1,24 +1,20 @@
 import React, { Component } from "react";
 
-import TaskList from "../task-list";
 import NewTaskForm from "../new-task-form";
+import TaskList from "../task-list";
 import Footer from "../footer";
 
 import "./app.css"
 export default class App extends Component {
-    nextId = 4
+    nextId = 1
     state = {
-        todoData: [
-            {description: "Completed task", creationTime: "created 17 seconds ago", done: false, editable: false, id: "item1"},
-            {description: "Editing task", creationTime: "created 5 minutes ago", done: false, editable: false, id: "item2"},
-            {description: "Active task", creationTime: "created 5 minutes ago", done: false, editable: false, id: "item3"},
-        ],
+        todoData: [],
         visible: "all"
     }
     createTodoItem(description) {
         return {
             description,
-            creationTime: "now",
+            creationTime: Date.now(),
             done: false,
             editable: false,
             id: `item${this.nextId++}`
@@ -28,7 +24,6 @@ export default class App extends Component {
         const idx = arr.findIndex((item) => item.id === id)
         const oldItem = arr[idx]
         const newItem = {...oldItem, [propName]: !oldItem[propName]}
-
         return [
             ...arr.slice(0, idx),
             newItem,
@@ -63,6 +58,14 @@ export default class App extends Component {
             }
         })
     }
+    deleteDoneItems = () => {
+        this.setState(({todoData}) => {
+            const newArr = todoData.filter((item) => !item.done)
+            return {
+                todoData: newArr
+            }
+        })
+    }
     onSubmit = (evt) => {
         if (evt.keyCode === 13) {
             this.addItem(evt.target.value)
@@ -81,26 +84,25 @@ export default class App extends Component {
         }
     }
     render() {
-        const { todoData, visible } = this.state
+        const { todoData, visible} = this.state
         const doneCount = todoData.filter((item) => item.done).length
         const activeCount = todoData.length - doneCount
         const visibleList = this.showList(visible);
-        console.log(visibleList)
         return (
             <section className="todoapp">
                 <header className="header">
                     <h1>todos</h1>
-                    <NewTaskForm addItem={this.addItem} onSubmit={this.onSubmit} />
+                    <NewTaskForm addItem={this.addItem}
+                                 onSubmit={this.onSubmit} />
                 </header>
                 <section className="main">
-                    <TaskList todoData={todoData}
+                    <TaskList todoData={visibleList}
                               onToggleDone={ this.onToggleDone }
                               editItem={this.editItem}
-                              deleteItem={this.deleteItem}
-                              onSubmit={this.onSubmit}/>
+                              deleteItem={this.deleteItem} />
                     <Footer activeCount={activeCount}
-                            visible={visible}
-                            onToggleVis={this.onToggleVis} />
+                            onToggleVis={this.onToggleVis}
+                            deleteDoneItems={this.deleteDoneItems} />
                 </section>
             </section>
         )

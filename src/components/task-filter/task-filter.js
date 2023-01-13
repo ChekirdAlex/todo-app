@@ -1,8 +1,15 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import "./task-filter.css"
 
 export default class TaskFilter extends Component {
+    static defaultProps = {
+        onToggleVis: () => {}
+    }
+    static propTypes = {
+        onToggleVis: PropTypes.func
+    }
     state = {
         selected: "all"
     }
