@@ -11,7 +11,7 @@ function NewTaskForm({ onSubmit }) {
 NewTaskForm.defaultProps = {
   onSubmit: () => {},
 };
-NewTaskForm.protoTypes = {
+NewTaskForm.propTypes = {
   onSubmit: PropTypes.func,
 };
 export default NewTaskForm;
