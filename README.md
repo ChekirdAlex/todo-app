@@ -1,5 +1,5 @@
 # Todo App
-Vercel Url: https://todo-app-tau-fawn.vercel.app/
+Vercel Url:
 
 -----
 
