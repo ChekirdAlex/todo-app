@@ -7,36 +7,22 @@ import Footer from '../footer';
 import './app.css';
 
 export default class App extends Component {
-  static toggleProperty(arr, id, propName) {
+  nextId = 1;
+
+  state = {
+    todoData: [],
+    visible: 'all',
+  };
+
+  toggleProperty = (arr, id, propName) => {
     const idx = arr.findIndex((item) => item.id === id);
     const oldItem = arr[idx];
     const newItem = { ...oldItem, [propName]: !oldItem[propName] };
     return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
-  }
-
-  nextId = 10;
-
-  state = {
-    todoData: [
-      {
-        description: 'Completed task',
-        creationTime: Date.now(),
-        done: false,
-        editable: false,
-        id: 'item1',
-      },
-      { description: 'Editing task', creationTime: Date.now(), done: false, editable: false, id: 'item2' },
-      { description: 'Active task', creationTime: Date.now(), done: false, editable: false, id: 'item3' },
-    ],
-    visible: 'all',
   };
 
   onToggleDone = (id) => {
-    this.setState(({ todoData }) => ({ todoData: App.toggleProperty(todoData, id, 'done') }));
-  };
-
-  editItem = (id) => {
-    this.setState(({ todoData }) => ({ todoData: App.toggleProperty(todoData, id, 'editable') }));
+    this.setState(({ todoData }) => ({ todoData: this.toggleProperty(todoData, id, 'done') }));
   };
 
   addItem = (description) => {
@@ -67,14 +53,6 @@ export default class App extends Component {
         todoData: newArr,
       };
     });
-  };
-
-  onSubmit = (evt) => {
-    if (evt.keyCode === 13) {
-      this.addItem(evt.target.value);
-      // eslint-disable-next-line no-param-reassign
-      evt.target.value = '';
-    }
   };
 
   onToggleVis = (selector) => {
@@ -112,15 +90,10 @@ export default class App extends Component {
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <NewTaskForm addItem={this.addItem} onSubmit={this.onSubmit} />
+          <NewTaskForm addItem={this.addItem} />
         </header>
         <section className="main">
-          <TaskList
-            todoData={visibleList}
-            onToggleDone={this.onToggleDone}
-            editItem={this.editItem}
-            deleteItem={this.deleteItem}
-          />
+          <TaskList todoData={visibleList} onToggleDone={this.onToggleDone} deleteItem={this.deleteItem} />
           <Footer activeCount={activeCount} onToggleVis={this.onToggleVis} deleteDoneItems={this.deleteDoneItems} />
         </section>
       </section>

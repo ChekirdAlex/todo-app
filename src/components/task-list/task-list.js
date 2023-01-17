@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import Task from '../task';
 
@@ -9,7 +10,6 @@ export default class TaskList extends PureComponent {
   static defaultProps = {
     todoData: [],
     onToggleDone: () => {},
-    editItem: () => {},
     deleteItem: () => {},
   };
 
@@ -24,28 +24,23 @@ export default class TaskList extends PureComponent {
       })
     ),
     onToggleDone: PropTypes.func,
-    editItem: PropTypes.func,
     deleteItem: PropTypes.func,
   };
 
   render() {
-    const { todoData, onToggleDone, editItem, deleteItem } = this.props;
+    const { todoData, onToggleDone, deleteItem } = this.props;
 
     const items = todoData.map(({ id, ...itemProps }) => {
-      let classNames = '';
-      if (itemProps.done) classNames += 'completed';
-      if (itemProps.editable) classNames += 'editing';
+      const classes = classNames({
+        completed: itemProps.done,
+        editing: itemProps.editable,
+      });
 
       const editing = <input type="text" className="edit" value={itemProps.description} />;
 
       return (
-        <li key={id} className={classNames}>
-          <Task
-            {...itemProps}
-            onToggleDone={() => onToggleDone(id)}
-            editItem={() => editItem(id)}
-            deleteItem={() => deleteItem(id)}
-          />
+        <li key={id} className={classes}>
+          <Task {...itemProps} onToggleDone={() => onToggleDone(id)} deleteItem={() => deleteItem(id)} />
           {itemProps.editable ? editing : null}
         </li>
       );

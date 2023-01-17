@@ -1,17 +1,48 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './new-task-form.css';
 
-function NewTaskForm({ onSubmit }) {
-  return (
-    <input type="text" className="new-todo" placeholder="What needs to be done?" onKeyDown={(evt) => onSubmit(evt)} />
-  );
+export default class NewTaskForm extends Component {
+  state = {
+    description: '',
+  };
+
+  onLabelChange = (evt) => {
+    this.setState({
+      description: evt.target.value,
+    });
+  };
+
+  onSubmit = (evt) => {
+    const { addItem } = this.props;
+    const { description } = this.state;
+    evt.preventDefault();
+    addItem(description);
+    this.setState({ description: '' });
+  };
+
+  render() {
+    const { description } = this.state;
+    return (
+      <form onSubmit={this.onSubmit}>
+        <input
+          type="text"
+          className="new-todo"
+          placeholder="What needs to be done?"
+          onChange={this.onLabelChange}
+          minLength={1}
+          maxLength={20}
+          value={description}
+          required
+        />
+      </form>
+    );
+  }
 }
 NewTaskForm.defaultProps = {
-  onSubmit: () => {},
+  addItem: () => {},
 };
 NewTaskForm.propTypes = {
-  onSubmit: PropTypes.func,
+  addItem: PropTypes.func,
 };
-export default NewTaskForm;

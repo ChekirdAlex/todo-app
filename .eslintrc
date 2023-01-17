@@ -29,6 +29,7 @@
   "parser": "@babel/eslint-parser",
   "plugins": ["react", "prettier", "import"],
   "rules": {
+    "class-methods-use-this": "off",
     "prettier/prettier": "error",
     "linebreak-style": [0, "unix"],
     "quotes": ["error", "single"],
