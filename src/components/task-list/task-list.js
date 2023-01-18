@@ -29,22 +29,20 @@ export default class TaskList extends PureComponent {
 
   render() {
     const { todoData, onToggleDone, deleteItem } = this.props;
-
-    const items = todoData.map(({ id, ...itemProps }) => {
-      const classes = classNames({
-        completed: itemProps.done,
-        editing: itemProps.editable,
-      });
-
-      const editing = <input type="text" className="edit" value={itemProps.description} />;
-
-      return (
-        <li key={id} className={classes}>
-          <Task {...itemProps} onToggleDone={() => onToggleDone(id)} deleteItem={() => deleteItem(id)} />
-          {itemProps.editable ? editing : null}
-        </li>
-      );
-    });
-    return <ul className="todo-list">{items}</ul>;
+    return (
+      <ul className="todo-list">
+        {todoData.map(({ id, ...itemProps }) => {
+          const classes = classNames({
+            completed: itemProps.done,
+            editing: itemProps.editable,
+          });
+          return (
+            <li key={id} className={classes}>
+              <Task {...itemProps} onToggleDone={() => onToggleDone(id)} deleteItem={() => deleteItem(id)} />
+            </li>
+          );
+        })}
+      </ul>
+    );
   }
 }
