@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { formatDistanceToNow } from 'date-fns';
 
 import './task.css';
+import TaskTimer from '../task-timer';
 
 export default class Task extends PureComponent {
   static defaultProps = {
@@ -30,7 +31,8 @@ export default class Task extends PureComponent {
       <div className="view">
         <input type="checkbox" className="toggle" onClick={onToggleDone} defaultChecked={done} />
         <div className="wrapper">
-          <span className="description">{description}</span>
+          <span className="title">{description}</span>
+          <TaskTimer />
           <span className="created"> сreated {distanceCreation}</span>
         </div>
         <button type="button" aria-label="Edit" className="icon icon-edit" />

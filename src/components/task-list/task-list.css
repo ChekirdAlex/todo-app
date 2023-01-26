@@ -109,7 +109,7 @@
     color: gray;
 }
 
-.todo-list li .wrapper .description {
+.todo-list li .wrapper .title {
     word-break: break-all;
     display: block;
     line-height: 1.2;
@@ -118,7 +118,7 @@
     color: #4d4d4d;
 }
 
-.todo-list li.completed .wrapper .description {
+.todo-list li.completed .wrapper .title {
     color: #cdcdcd;
     text-decoration: line-through;
 }
@@ -163,6 +163,25 @@
 
 .todo-list li.editing:last-child {
     margin-bottom: -1px;
+}
+
+.todo-list li .icon-pause,
+.todo-list li .icon-play {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.todo-list li .icon-play {
+    font-size: 15px;
+}
+
+.icon-pause:after {
+    content: '⏸';
+}
+
+.icon-play:after {
+    content: '▶';
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {

@@ -38,7 +38,7 @@ export default class TaskList extends PureComponent {
           });
           return (
             <li key={id} className={classes}>
-              <Task {...itemProps} onToggleDone={() => onToggleDone(id)} deleteItem={() => deleteItem(id)} />
+              <Task {...itemProps} id={id} onToggleDone={() => onToggleDone(id)} deleteItem={() => deleteItem(id)} />
             </li>
           );
         })}

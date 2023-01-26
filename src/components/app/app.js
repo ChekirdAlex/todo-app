@@ -25,8 +25,11 @@ export default class App extends Component {
     this.setState(({ todoData }) => ({ todoData: this.toggleProperty(todoData, id, 'done') }));
   };
 
-  addItem = (description) => {
-    const newItem = this.createTodoItem(description);
+  getTime = (minutes, seconds) => +minutes * 60 + +seconds;
+
+  addItem = (description, minutes, seconds) => {
+    const totalTime = this.getTime(minutes, seconds);
+    const newItem = this.createTodoItem(description, totalTime);
 
     this.setState(({ todoData }) => {
       const newArr = [...todoData, newItem];
@@ -71,9 +74,10 @@ export default class App extends Component {
     }
   };
 
-  createTodoItem(description) {
+  createTodoItem(description, totalTime) {
     return {
       description,
+      totalTime,
       creationTime: Date.now(),
       done: false,
       editable: false,
