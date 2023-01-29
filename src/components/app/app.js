@@ -74,10 +74,10 @@ export default class App extends Component {
     }
   };
 
-  createTodoItem(description, totalTime) {
+  createTodoItem(description, startTime) {
     return {
       description,
-      totalTime,
+      startTime,
       creationTime: Date.now(),
       done: false,
       editable: false,
