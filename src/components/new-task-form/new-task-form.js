@@ -54,7 +54,7 @@ export default class NewTaskForm extends Component {
           value={minutes}
           placeholder="Min"
           onChange={this.onLabelChange}
-          pattern="[1-9]{1}[0-9]*"
+          pattern="[0-9]*"
           required
         />
         <input
