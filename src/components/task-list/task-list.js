@@ -28,7 +28,7 @@ export default class TaskList extends PureComponent {
   };
 
   render() {
-    const { todoData, onToggleDone, deleteItem } = this.props;
+    const { todoData, onToggleDone, deleteItem, onPlayClicked, onPauseClicked } = this.props;
     return (
       <ul className="todo-list">
         {todoData.map(({ id, ...itemProps }) => {
@@ -38,7 +38,14 @@ export default class TaskList extends PureComponent {
           });
           return (
             <li key={id} className={classes}>
-              <Task {...itemProps} id={id} onToggleDone={() => onToggleDone(id)} deleteItem={() => deleteItem(id)} />
+              <Task
+                {...itemProps}
+                id={id}
+                onToggleDone={() => onToggleDone(id)}
+                deleteItem={() => deleteItem(id)}
+                onPlayClicked={() => onPlayClicked(id)}
+                onPauseClicked={() => onPauseClicked(id)}
+              />
             </li>
           );
         })}

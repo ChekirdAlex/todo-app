@@ -4,47 +4,6 @@ import './task-timer.css';
 import { getPadTime } from '../../helpers';
 
 export default class TaskTimer extends Component {
-  state = {
-    isTimerOn: false,
-    timeLeft: null,
-  };
-
-  componentDidMount() {
-    const { startTime } = this.props;
-    this.setState({ timeLeft: startTime });
-  }
-
-  componentDidUpdate() {
-    const { isTimerOn } = this.state;
-    if (isTimerOn) {
-      this.updateTime();
-    } else {
-      clearInterval(this.interval);
-    }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  updateTime = () => {
-    const { timeLeft } = this.state;
-    clearInterval(this.interval);
-    this.interval = setInterval(() => {
-      const newTime = timeLeft - 1;
-      this.setState(() => ({ timeLeft: newTime }));
-    }, 1000);
-    if (timeLeft === 0) clearInterval(this.interval);
-  };
-
-  onPlayClicked = () => {
-    this.setState({ isTimerOn: true });
-  };
-
-  onPauseClicked = () => {
-    this.setState({ isTimerOn: false });
-  };
-
   formatTime = (timeState) => {
     const minutes = getPadTime(Math.floor(timeState / 60));
     const seconds = getPadTime(timeState - minutes * 60);
@@ -52,12 +11,12 @@ export default class TaskTimer extends Component {
   };
 
   render() {
-    const { timeLeft } = this.state;
-    const displayTime = this.formatTime(timeLeft);
+    const { onPlayClicked, onPauseClicked, totalTime } = this.props;
+    const displayTime = this.formatTime(totalTime);
     return (
       <span className="description">
-        <button type="button" className="icon icon-play" aria-label="play" onClick={this.onPlayClicked} />
-        <button type="button" className="icon icon-pause" aria-label="pause" onClick={this.onPauseClicked} />
+        <button type="button" className="icon icon-play" aria-label="play" onClick={onPlayClicked} />
+        <button type="button" className="icon icon-pause" aria-label="pause" onClick={onPauseClicked} />
         <div className="timer">{displayTime}</div>
       </span>
     );

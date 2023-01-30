@@ -23,7 +23,8 @@ export default class Task extends PureComponent {
   };
 
   render() {
-    const { description, creationTime, done, onToggleDone, deleteItem, startTime } = this.props;
+    const { description, creationTime, done, onToggleDone, deleteItem, totalTime, onPlayClicked, onPauseClicked } =
+      this.props;
 
     const distanceCreation = formatDistanceToNow(creationTime, { addSuffix: true });
 
@@ -32,7 +33,7 @@ export default class Task extends PureComponent {
         <input type="checkbox" className="toggle" onClick={onToggleDone} defaultChecked={done} />
         <div className="wrapper">
           <span className="title">{description}</span>
-          <TaskTimer startTime={startTime} />
+          <TaskTimer totalTime={totalTime} onPlayClicked={onPlayClicked} onPauseClicked={onPauseClicked} />
           <span className="created"> сreated {distanceCreation}</span>
         </div>
         <button type="button" aria-label="Edit" className="icon icon-edit" />

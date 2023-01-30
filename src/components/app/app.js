@@ -14,10 +14,19 @@ export default class App extends Component {
     visible: 'all',
   };
 
-  toggleProperty = (arr, id, propName) => {
+  componentDidMount() {
+    this.updateTime();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  // handlers
+  toggleProperty = (arr, id, propName, value = !arr[arr.findIndex((item) => item.id === id)][propName]) => {
     const idx = arr.findIndex((item) => item.id === id);
     const oldItem = arr[idx];
-    const newItem = { ...oldItem, [propName]: !oldItem[propName] };
+    const newItem = { ...oldItem, [propName]: value };
     return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
   };
 
@@ -74,10 +83,51 @@ export default class App extends Component {
     }
   };
 
-  createTodoItem(description, startTime) {
+  // timer
+  onPlayClicked = (id) => {
+    this.setState(({ todoData }) => ({ todoData: this.toggleProperty(todoData, id, 'isTimerOn', true) }));
+  };
+
+  onPauseClicked = (id) => {
+    this.setState(({ todoData }) => ({ todoData: this.toggleProperty(todoData, id, 'isTimerOn', false) }));
+  };
+
+  updateTime = () => {
+    // const { todoData } = this.state;
+    // clearInterval(this.interval);
+    // this.interval = setInterval(() => {
+    //   // eslint-disable-next-line array-callback-return
+    //   todoData.map((item) => {
+    //     if (item.isTimerOn) {
+    //       const newTime = item.totalTime - 1;
+    //       this.setState(() => ({ todoData: this.toggleProperty(todoData, item.id, 'totalTime', newTime) }));
+    //     }
+    //   });
+    // }, 1000);
+    this.interval = setInterval(() => {
+      this.setState(({ todoData }) => {
+        const newArr = todoData.map((item) => {
+          if (item.totalTime === 0 || item.done) {
+            return item;
+          }
+          if (item.isTimerOn) {
+            // eslint-disable-next-line no-param-reassign
+            item.totalTime -= 1;
+          }
+          return item;
+        });
+        return {
+          todoData: newArr,
+        };
+      });
+    }, 1000);
+  };
+
+  createTodoItem(description, totalTime) {
     return {
       description,
-      startTime,
+      totalTime,
+      isTimerOn: false,
       creationTime: Date.now(),
       done: false,
       editable: false,
@@ -97,7 +147,13 @@ export default class App extends Component {
           <NewTaskForm addItem={this.addItem} />
         </header>
         <section className="main">
-          <TaskList todoData={visibleList} onToggleDone={this.onToggleDone} deleteItem={this.deleteItem} />
+          <TaskList
+            todoData={visibleList}
+            onToggleDone={this.onToggleDone}
+            deleteItem={this.deleteItem}
+            onPlayClicked={this.onPlayClicked}
+            onPauseClicked={this.onPauseClicked}
+          />
           <Footer activeCount={activeCount} onToggleVis={this.onToggleVis} deleteDoneItems={this.deleteDoneItems} />
         </section>
       </section>
